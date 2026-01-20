@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Developer Experience — Executive Dashboard (Q1)</title>
+  <style>
+    :root{
+      --bg:#0b0f1a;
+      --card:#121a2b;
+      --card2:#0f172a;
+      --text:#e7eefc;
+      --muted:#a8b3cf;
+      --line:rgba(255,255,255,.10);
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --neutral:#94a3b8;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(59,130,246,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(34,197,94,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .page{
+      max-width: 1100px;
+      margin: 36px auto;
+      padding: 0 18px 36px;
+    }
+    header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:16px;
+      padding: 18px 18px 10px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    h1{
+      margin:0;
+      font-size: 28px;
+      letter-spacing: .2px;
+    }
+    .subtitle{
+      margin-top:6px;
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 14px;
+      max-width: 760px;
+    }
+    .meta{
+      text-align:right;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      white-space: nowrap;
+    }
+
+    .grid{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 14px;
+    }
+    .stack{
+      display:grid;
+      gap:14px;
+    }
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding: 14px 16px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .card .bd{
+      padding: 14px 16px 16px;
+    }
+    .kicker{
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .title{
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      white-space: nowrap;
+    }
+    .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+    .good{ background: var(--good); }
+    .warn{ background: var(--warn); }
+    .neutral{ background: var(--neutral); }
+
+    .metric{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items:baseline;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(255,255,255,.12);
+    }
+    .metric:last-child{ border-bottom: none; }
+    .metric .name{
+      font-weight: 650;
+      font-size: 14px;
+    }
+    .metric .def{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+      line-height: 1.3;
+    }
+    .metric .val{
+      font-size: 16px;
+      font-weight: 800;
+      text-align:right;
+    }
+    .metric .tgt{
+      color: var(--muted);
+      font-size: 12px;
+      text-align:right;
+      margin-top: 3px;
+    }
+    .takeaway{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(2,6,23,.35);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .takeaway strong{ font-weight: 800; }
+    .bullets{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+    }
+    .bullets li{
+      margin: 6px 0;
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 13px;
+    }
+
+    .footer{
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      box-shadow: var(--shadow);
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .footer .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 16px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .pill{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .pill b{ color: var(--text); }
+
+    /* Print/PDF */
+    @media print{
+      body{ background: #fff; color:#111; }
+      header, .card, .footer{ box-shadow:none; }
+      .page{ max-width: none; margin: 0; padding: 0; }
+      header, .card, .footer{
+        border: 1px solid #ddd;
+        background: #fff;
+      }
+      .badge, .pill{ border: 1px solid #ddd; background: #fff; }
+      .metric{ border-bottom: 1px dashed #ddd; }
+      .metric:last-child{ border-bottom: none; }
+      .subtitle, .meta, .kicker, .metric .def, .metric .tgt, .bullets li, .pill{ color:#444; }
+      .takeaway{ border: 1px solid #ddd; background:#fafafa; color:#111; }
+      .dot.good{ background:#16a34a !important; }
+      .dot.warn{ background:#d97706 !important; }
+      .dot.neutral{ background:#64748b !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <h1>Developer Experience — Executive Dashboard (Q1)</h1>
+        <div class="subtitle">
+          <b>Goal:</b> Increase engineering velocity by reducing feedback latency, coordination overhead, and delivery friction —
+          so AI-accelerated change produces real throughput, not larger queues.
+        </div>
+      </div>
+      <div class="meta">
+        <div><b>Week:</b> 16-01-2026</div>
+        <div><b>Theme:</b> DX — Dev Tool Efficacy</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Left column: core outcomes -->
+      <div class="stack">
+        <!-- North Star -->
+        <section class="card">
+          <div class="hd">
+            <div>
+              <div class="kicker">North Star</div>
+              <div class="title">Time to Customer Value</div>
+            </div>
+            <div class="badge" title="Status">
+              <span class="dot warn"></span> 🟡 Improving; constrained by CI + PR flow
+            </div>
+          </div>
+          <div class="bd">
+            <div class="metric">
+              <div>
+                <div class="name">Lead Time to Change (P50)</div>
+                <div class="def">Time from first commit (e.g., branch cut) to successful production deployment.</div>
+              </div>
+              <div>
+                <div class="val">3.9 days</div>
+                <div class="tgt">Target: &lt; 2 days (H1)</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CI -->
+        <section class="card">
+          <div class="hd">
+            <div>
+              <div class="kicker">Pillar A</div>
+              <div class="title">Speed to First Useful Feedback (CI) - “How fast does an engineer know if their change is good?”</div>
+            </div>
+            <div class="badge"><span class="dot warn"></span> 🟡 Focus area</div>
+          </div>
+          <div class="bd">
+            <div class="metric">
+              <div>
+                <div class="name">P75 CI Queue + Build Time (Human-triggered)</div>
+                <div class="def">System-level developer feedback latency (queue + build). Dashboard in progress.</div>
+              </div>
+              <div>
+                <div class="val">—</div>
+                <div class="tgt">Target: Queue P75 &lt; 1 min</div>
+              </div>
+            </div>
+
+            <ul class="bullets">
+              <li><b>Mobile CI:</b> Expand Android test selection + enable Cash Android; iOS M4 worker migration + RBE host updates.</li>
+              <li><b>RBE:</b> Vendor selected (EngFlow); contract in review. Target: build step time &lt; 33% of original.</li>
+              <li><b>Reliability:</b> 85% green main (dashboard in progress).</li>
+            </ul>
+
+            <div class="takeaway">
+              <strong>Exec takeaway:</strong> CI is the highest-leverage DX bottleneck. Mobile + Java are the slowest feedback loops and primary focus.
+            </div>
+          </div>
+        </section>
+
+        <!-- PR Flow -->
+        <section class="card">
+          <div class="hd">
+            <div>
+              <div class="kicker">Pillar B</div>
+              <div class="title">PR Flow & Review Friction: “How easily does work move from ready to merged?”</div>
+            </div>
+            <div class="badge"><span class="dot good"></span> 🟢 Improving</div>
+          </div>
+          <div class="bd">
+            <div class="metric">
+              <div>
+                <div class="name">PR Merge Time</div>
+                <div class="def">Time from open (not draft) to merge.</div>
+              </div>
+              <div>
+                <div class="val">3.5 hrs</div>
+                <div class="tgt">Target: ↓ 25% for 50 teams (lead time to review)</div>
+              </div>
+            </div>
+
+            <div class="metric">
+              <div>
+                <div class="name">Lead Time to First Review</div>
+                <div class="def">Time from open (not draft) to first comment.</div>
+              </div>
+              <div>
+                <div class="val">38 min</div>
+                <div class="tgt">Target: ↓ 25% (pilot teams)</div>
+              </div>
+            </div>
+
+            <ul class="bullets">
+              <li><b>SOX approval friction:</b> Approval retention improved from &lt;15% → ~50%, impacting ~200 PRs/week.</li>
+              <li>Design in-house; evaluating 1–2 vendors for internal pilot (AI reviewer / inbox / RFC).</li>
+            </ul>
+
+            <div class="takeaway">
+              <strong>Exec takeaway:</strong> Removing coordination friction protects velocity as PR volume grows (especially from AI).
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right column: Blox + Delivery + AI Capacity -->
+      <div class="stack">
+        <!-- Blox -->
+        <section class="card">
+          <div class="hd">
+            <div>
+              <div class="kicker">Pillar C</div>
+              <div class="title">Local Dev & Inner Loop (Blox): “How quickly can an engineer go from idea → working code?”</div>
+            </div>
+            <div class="badge"><span class="dot neutral"></span> ⚪ Not yet live</div>
+          </div>
+          <div class="bd">
+            <div class="metric">
+              <div>
+                <div class="name">Blox PR Throughput Lift</div>
+                <div class="def">Blox user PR/Eng/Week uplift vs overall PR/Eng/Week baseline.</div>
+              </div>
+              <div>
+                <div class="val">N/A</div>
+                <div class="tgt">Target: MAU 100+; CSAT ≥8; ≥3×/month</div>
+              </div>
+            </div>
+            <ul class="bullets">
+              <li>Workspace contracts (self-serve build/test eligibility)</li>
+              <li>Docker in containers (MySQL + Redis baked in)</li>
+              <li>Observability (logs + metrics → Datadog)</li>
+              <li>Chrome extension usability improvements</li>
+            </ul>
+            <div class="takeaway">
+              <strong>Exec takeaway:</strong> Standardizes environments and eliminates setup as a recurring tax; metrics turn on at broad availability.
+            </div>
+          </div>
+        </section>
+
+        <!-- Delivery -->
+        <section class="card">
+          <div class="hd">
+            <div>
+              <div class="kicker">Pillar D</div>
+              <div class="title">Delivery & Release Flow “How fast does code safely reach production?”</div>
+            </div>
+            <div class="badge"><span class="dot warn"></span> 🟡 In progress</div>
+          </div>
+          <div class="bd">
+            <div class="metric">
+              <div>
+                <div class="name">Deployment Frequency (Tier 0/1)</div>
+                <div class="def">Production deployments per Tier 0/1 service per week.</div>
+              </div>
+              <div>
+                <div class="val">2.51</div>
+                <div class="tgt">Target: ↑ safely via automation</div>
+              </div>
+            </div>
+            <ul class="bullets">
+              <li>Playpen adoption outreach ongoing; tooling nudges to reduce staging squatting.</li>
+              <li>Shared acceptance test framework validation (Shadow): local running OK; pipeline next.</li>
+            </ul>
+            <div class="takeaway">
+              <strong>Exec takeaway:</strong> Async delivery (Playpen + acceptance tests) is required to sustain higher change volume.
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Capacity -->
+        <section class="card">
+          <div class="hd">
+            <div>
+              <div class="kicker">Cross-cutting</div>
+              <div class="title">Engineering Capacity Gained (AI): “How much human effort did we give back?”</div>
+            </div>
+            <div class="badge"><span class="dot good"></span> 🟢 Material gains</div>
+          </div>
+          <div class="bd">
+            <div class="metric">
+              <div>
+                <div class="name">Estimated Engineering Hours Saved</div>
+                <div class="def">Sum of estimated time saved per AI-assisted migration (when fully instrumented).</div>
+              </div>
+              <div>
+                <div class="val">~8,000 hrs</div>
+                <div class="tgt">Target: Repeatable, accepted PRs</div>
+              </div>
+            </div>
+            <ul class="bullets">
+              <li>AWS SDK V2: Go ~97%, Java 23%; ~10× speedup (~2,000 hrs saved on Go)</li>
+              <li>Base UI → Fluent: 92% complete; ~6,400 hrs saved</li>
+              <li>Armeria → Misk: ~50% faster than manual; prerequisites aligned for scale</li>
+            </ul>
+            <div class="takeaway">
+              <strong>Exec takeaway:</strong> We are systematically removing the highest-friction points in the developer workflow — environment setup, CI feedback, PR flow, and delivery — because these are the compounding constraints on engineering velocity. This work matters now because AI is dramatically increasing code throughput, and without fixing these constraints first, we would simply create larger queues, slower feedback, and more burnout instead of real speed.
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="row">
+        <div class="pill"><b>What’s working:</b> PR flow improvements; AI migrations delivering real capacity</div>
+        <div class="pill"><b>What’s gating:</b> CI feedback speed (mobile + Java); delivery synchronicity</div>
+      </div>
+      <div class="row">
+        <div class="pill"><b>Why now:</b> AI is scaling code faster than systems — this prevents self-inflicted slowdown</div>
+        <div class="pill"><b>Confidence:</b> High (metrics aligned to system constraints, not vanity signals)</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+</html>
