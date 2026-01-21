@@ -1,6 +1,6 @@
 # Velocity Reporting
 
-Executive dashboards for tracking Developer Experience (DX) and engineering velocity metrics.
+Executive dashboards for tracking Developer Velocity Work. Includes program of work across Developer Experience (DX) and AI Adoption.
 
 ## Dashboards
 
