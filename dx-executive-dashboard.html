@@ -178,6 +178,98 @@
       letter-spacing: .03em;
     }
 
+    /* Key Metrics Over Time */
+    .key-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .key-metric {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+    .key-metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .key-metric-name {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .key-metric-trend {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .key-metric-trend.up {
+      color: var(--good);
+      background: rgba(34,197,94,.15);
+    }
+    .key-metric-trend.down {
+      color: var(--warn);
+      background: rgba(245,158,11,.15);
+    }
+    .key-metric-trend.flat {
+      color: var(--muted);
+      background: rgba(255,255,255,.08);
+    }
+    .key-metric-value {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .key-metric-target {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .key-metric-chart {
+      flex: 1;
+      min-height: 50px;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(255,255,255,.1);
+    }
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(180deg, rgba(59,130,246,.6), rgba(59,130,246,.3));
+      border-radius: 3px 3px 0 0;
+      min-height: 4px;
+      position: relative;
+    }
+    .chart-bar::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .chart-bar.current {
+      background: linear-gradient(180deg, rgba(34,197,94,.8), rgba(34,197,94,.5));
+    }
+    @media (max-width: 900px) {
+      .key-metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .key-metrics { grid-template-columns: 1fr; }
+    }
+
     @media print {
       body { background: #fff; color: #111; }
       .page { max-width: none; padding: 10px; }
@@ -193,8 +285,67 @@
   <div class="page">
     <header>
       <h1>Dev Velocity/Efficiency Priority | Week 3</h1>
-      <div class="subtitle"> Week: 16-01-2026</div>
+      <div class="subtitle">DX - Dev Tool Efficacy &nbsp;•&nbsp; Week: 16-01-2026</div>
     </header>
+
+    <!-- Key Metrics Trend -->
+    <div class="key-metrics">
+      <div class="key-metric">
+        <div class="key-metric-header">
+          <div class="key-metric-name">PR Throughput</div>
+          <div class="key-metric-trend up">+5%</div>
+        </div>
+        <div class="key-metric-value">23,500</div>
+        <div class="key-metric-target">Weekly PRs merged</div>
+        <div class="key-metric-chart">
+          <div class="chart-bar" style="height:70%" data-label="W1"></div>
+          <div class="chart-bar" style="height:85%" data-label="W2"></div>
+          <div class="chart-bar current" style="height:95%" data-label="W3"></div>
+        </div>
+      </div>
+
+      <div class="key-metric">
+        <div class="key-metric-header">
+          <div class="key-metric-name">DXI</div>
+          <div class="key-metric-trend flat">—</div>
+        </div>
+        <div class="key-metric-value">—</div>
+        <div class="key-metric-target">Developer Experience Index</div>
+        <div class="key-metric-chart">
+          <div class="chart-bar" style="height:0%" data-label="W1"></div>
+          <div class="chart-bar" style="height:0%" data-label="W2"></div>
+          <div class="chart-bar current" style="height:0%" data-label="W3"></div>
+        </div>
+      </div>
+
+      <div class="key-metric">
+        <div class="key-metric-header">
+          <div class="key-metric-name">Lead Time to Change</div>
+          <div class="key-metric-trend down">−0.2d</div>
+        </div>
+        <div class="key-metric-value">3.9 days</div>
+        <div class="key-metric-target">Target: &lt;2 days (H1)</div>
+        <div class="key-metric-chart">
+          <div class="chart-bar" style="height:85%" data-label="W1"></div>
+          <div class="chart-bar" style="height:78%" data-label="W2"></div>
+          <div class="chart-bar current" style="height:72%" data-label="W3"></div>
+        </div>
+      </div>
+
+      <div class="key-metric">
+        <div class="key-metric-header">
+          <div class="key-metric-name">Deploy Frequency</div>
+          <div class="key-metric-trend up">+0.1</div>
+        </div>
+        <div class="key-metric-value">2.51</div>
+        <div class="key-metric-target">deploys/service/week</div>
+        <div class="key-metric-chart">
+          <div class="chart-bar" style="height:75%" data-label="W1"></div>
+          <div class="chart-bar" style="height:82%" data-label="W2"></div>
+          <div class="chart-bar current" style="height:88%" data-label="W3"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- AI Maturity -->
     <section class="card">
