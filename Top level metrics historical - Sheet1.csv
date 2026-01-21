@@ -1,0 +1,5 @@
+2026 Week Number,Overall CI Performance (Queue Wait + Build Time),CI Reliability,PR Merge Time (hours),Lead Time to Review (minutes),Weekly PR Reviews,Lead Time to Change,Deployment Frequency,Estimated Eng Hours Saved by AI,AI configured Repos
+1,?,86%,3.5,85.2,3200,12.7,0.5,0,?
+2,?,89%,3.5,38.6,21000,14.8,2.61,6000,?
+3,?,86%,2.9,33.8,23500,3.2,3.15,"8,000",657
+4,,,,,,,,,
